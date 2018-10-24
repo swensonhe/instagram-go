@@ -11,8 +11,8 @@ import (
 type APIClient interface {
 	GetAccessToken(code string) (*AccessTokenResponse, error)
 	GetSelf(token string) (*UserResponse, error)
+	GetRecentMedia(token string, maxID string, minID string, count int64) (*RecentMediaResponse, error)
 }
-
 
 type Client struct {
 	*http.Client
@@ -81,6 +81,7 @@ func (c *Client) GetAccessToken(code string) (*AccessTokenResponse, error) {
 	return &accessTokenResponse, nil
 }
 
+// GetSelf returns a user.
 func (c *Client) GetSelf(token string) (*UserResponse, error) {
 	u := url.URL{Scheme: urlScheme, Host: urlHost, Path: "/v1/users/self/"}
 
@@ -108,6 +109,55 @@ func (c *Client) GetSelf(token string) (*UserResponse, error) {
 	}
 
 	var resp UserResponse
+	err = bind(res, &resp)
+	if err != nil {
+		return nil, ErrInternal
+	}
+
+	return &resp, nil
+}
+
+// GetRecentMedia returns a user's recent media.
+func (c *Client) GetRecentMedia(token string, maxID string, minID string, count int64) (*RecentMediaResponse, error) {
+	u := url.URL{Scheme: urlScheme, Host: urlHost, Path: "/v1/users/self/media/recent"}
+
+	q := u.Query()
+	q.Set("access_token", token)
+
+	if maxID != "" {
+		q.Set("max_id", maxID)
+	}
+
+	if minID != "" {
+		q.Set("min_id", minID)
+	}
+
+	if count != 0 {
+		q.Set("count", fmt.Sprintf("%d", count))
+	}
+
+	u.RawQuery = q.Encode()
+
+	fmt.Println(u.String())
+
+	req, err := http.NewRequest(http.MethodGet, u.String(), nil)
+	if err != nil {
+		c.log(err)
+	}
+
+	res, err := c.Client.Do(req)
+	if err != nil {
+		c.log(err)
+		return nil, err
+	}
+
+	if res.StatusCode != 200 {
+		respBody, _ := ioutil.ReadAll(res.Body)
+		c.log(string(respBody))
+		return nil, ErrInternal
+	}
+
+	var resp RecentMediaResponse
 	err = bind(res, &resp)
 	if err != nil {
 		return nil, ErrInternal

@@ -8,6 +8,9 @@ type APIClient struct {
 
 	GetSelfFn func(token string) (*instagram.UserResponse, error)
 	GetSelfInvoked bool
+
+	GetRecentMediaFn      func(token string, maxID string, minID string, count int64) (*instagram.RecentMediaResponse, error)
+	GetRecentMediaInvoked bool
 }
 
 func NewAPIClient() *APIClient {
@@ -17,6 +20,9 @@ func NewAPIClient() *APIClient {
 		},
 		GetSelfFn: func(token string) (*instagram.UserResponse, error) {
 			return &instagram.UserResponse{}, nil
+		},
+		GetRecentMediaFn: func(token string, maxID string, minID string, count int64) (*instagram.RecentMediaResponse, error) {
+			return &instagram.RecentMediaResponse{}, nil
 		},
 	}
 }
@@ -29,4 +35,9 @@ func (c *APIClient) GetAccessToken(code string) (*instagram.AccessTokenResponse,
 func (c *APIClient) GetSelf(token string) (*instagram.UserResponse, error) {
 	c.GetSelfInvoked = true
 	return c.GetSelfFn(token)
+}
+
+func (c *APIClient) GetRecentMedia(token string, maxID string, minID string, count int64) (*instagram.RecentMediaResponse, error) {
+	c.GetRecentMediaInvoked = true
+	return c.GetRecentMediaFn(token, maxID, minID, count)
 }
