@@ -11,7 +11,7 @@ import (
 type APIClient interface {
 	GetAccessToken(code string) (*AccessTokenResponse, error)
 	GetSelf(token string) (*UserResponse, error)
-	GetRecentMedia(token string, maxID string, minID string, count int64) (*RecentMediaResponse, error)
+	GetRecentMedia(token string, maxID string, minID string, count int) (*RecentMediaResponse, error)
 }
 
 type Client struct {
