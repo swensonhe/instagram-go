@@ -118,7 +118,7 @@ func (c *Client) GetSelf(token string) (*UserResponse, error) {
 }
 
 // GetRecentMedia returns a user's recent media.
-func (c *Client) GetRecentMedia(token string, maxID string, minID string, count int64) (*RecentMediaResponse, error) {
+func (c *Client) GetRecentMedia(token string, maxID string, minID string, count int) (*RecentMediaResponse, error) {
 	u := url.URL{Scheme: urlScheme, Host: urlHost, Path: "/v1/users/self/media/recent"}
 
 	q := u.Query()
