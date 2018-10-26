@@ -1,7 +1,7 @@
 package instagram
 
 type UserCounts struct {
-	Media int `json:"media"`
-	Follows int `json:"follows"`
-	FollowedBy int `json:"followed_by"`
+	Media int64 `json:"media"`
+	Follows int64 `json:"follows"`
+	FollowedBy int64 `json:"followed_by"`
 }

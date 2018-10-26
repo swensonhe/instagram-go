@@ -1,5 +1,5 @@
 package instagram
 
 type Likes struct {
-	Count int `json:"count"`
+	Count int64 `json:"count"`
 }

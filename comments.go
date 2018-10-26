@@ -1,5 +1,5 @@
 package instagram
 
 type Comments struct {
-	Count int `json:"count"`
+	Count int64 `json:"count"`
 }
