@@ -13,7 +13,7 @@ type Media struct {
 	Tags        []string  `json:"tags"`
 	Location    *Location `json:"location"`
 	Link        string    `json:"string"`
-	CreatedTime int64     `json:"created_time"`
+	CreatedTime string    `json:"created_time"`
 }
 
 type RecentMediaResponse struct {
