@@ -89,8 +89,6 @@ func (c *Client) GetSelf(token string) (*UserResponse, error) {
 	q.Set("access_token", token)
 	u.RawQuery = q.Encode()
 
-	fmt.Println(u.String())
-
 	req, err := http.NewRequest(http.MethodGet, u.String(), nil)
 	if err != nil {
 		c.log(err)
@@ -138,11 +136,10 @@ func (c *Client) GetRecentMedia(token string, maxID string, minID string, count 
 
 	u.RawQuery = q.Encode()
 
-	fmt.Println(u.String())
-
 	req, err := http.NewRequest(http.MethodGet, u.String(), nil)
 	if err != nil {
 		c.log(err)
+		return nil, err
 	}
 
 	res, err := c.Client.Do(req)
@@ -160,6 +157,7 @@ func (c *Client) GetRecentMedia(token string, maxID string, minID string, count 
 	var resp RecentMediaResponse
 	err = bind(res, &resp)
 	if err != nil {
+		c.log(err)
 		return nil, ErrInternal
 	}
 
